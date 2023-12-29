@@ -1,0 +1,6 @@
+@FineManager_HostAddress = http://localhost:5029
+
+GET {{FineManager_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

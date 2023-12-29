@@ -1,0 +1,44 @@
+version: '3.4'
+
+services:
+
+  vehicles:
+    image: finemanagerapp.vehicles:latest
+    build:
+      context: ./src/Microservices/Vehicles
+      dockerfile: Dockerfile
+      args:
+        - configuration=Release
+    ports:
+      - 80:8080
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
+    entrypoint: ["dotnet", "Vehicles.dll"]
+
+
+  finemanager:
+    image: finemanagerapp.finemanager:latest
+    build:
+      context: ./src/Microservices/FineManager
+      dockerfile: Dockerfile
+      args:
+        - configuration=Release
+    ports:
+      - 81:8080
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
+    entrypoint: ["dotnet", "FineManager.dll"]
+
+  trafficevents:
+    image: finemanagerapp.trafficevents:latest
+    build:
+      context: ./src/Microservices/TrafficEvents
+      dockerfile: Dockerfile
+      args:
+        - configuration=Release
+    ports:
+      - 82:8080
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
+    entrypoint: ["dotnet", "TrafficEvents.dll"]
+
