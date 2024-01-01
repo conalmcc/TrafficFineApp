@@ -3,8 +3,8 @@ param location string = resourceGroup().location
 
 @description('Base container registry url for microservice container images')
 param containerRegistry string = 'finemanagerapp.azurecr.io'
-param registryUser string = 'finemanagerapp'
-param registryPass string = 'aSNX98IMoZxuZlYUviPNLby/RE5faOWKnXbWfGNR+W+ACRDQgUpv'
+param registryUser string
+param registryPass string
 
 @description('Name for the container group')
 param containerGroupName string = 'trafficfineappcontainergroup'

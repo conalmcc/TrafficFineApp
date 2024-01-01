@@ -18,7 +18,8 @@ jobs:
         az account show
         az group list
         pwd 
-    - name: 'Build container images into Azure'
+
+    - name: 'Build container images into Azure: Vehicles'
       uses: Azure/acr-build@v1
       with:
         # Service Principal with Contributor role on the ACR
@@ -32,7 +33,7 @@ jobs:
         # Repository to use
         repository: 'microservices/vehicle'
         # Docker image name
-        image: 'microservices/vehicle-test'
+        image: 'microservices/vehicle'
         # Docker image tag, default to the commit SHA
         tag: 'latest'
         # Branch to build from, defaults to master
@@ -42,5 +43,59 @@ jobs:
         # The location of the Dockerfile; defaults to ./Dockerfile
         dockerfile: 'dockerfile'
 
-      
+    - name: 'Build container images into Azure: TrafficEvents'
+      uses: Azure/acr-build@v1
+      with:
+        # Service Principal with Contributor role on the ACR
+        service_principal: '${{ secrets.AZURE_ACR_PRINCIPAL }}'
+        # Service Principal password
+        service_principal_password: '${{ secrets.AZURE_ACR_PRINCIPAL_PASSWORD }}'
+        # Azure Container Registry tenant
+        tenant: '${{ secrets.AZURE_TENANT_ID }}'
+        # The name of the ACR, minus the .azurecr.io
+        registry: 'finemanagerapp'
+        # Repository to use
+        repository: 'microservices/trafficevents'
+        # Docker image name
+        image: 'microservices/trafficevents'
+        # Docker image tag, default to the commit SHA
+        tag: 'latest'
+        # Branch to build from, defaults to master
+        branch: 'main'
+        # The folder in the Github repo that holds the source
+        folder: 'src/Microservices/TrafficEvents'
+        # The location of the Dockerfile; defaults to ./Dockerfile
+        dockerfile: 'dockerfile'
 
+    - name: 'Build container images into Azure: FineManager'
+      uses: Azure/acr-build@v1
+      with:
+        # Service Principal with Contributor role on the ACR
+        service_principal: '${{ secrets.AZURE_ACR_PRINCIPAL }}'
+        # Service Principal password
+        service_principal_password: '${{ secrets.AZURE_ACR_PRINCIPAL_PASSWORD }}'
+        # Azure Container Registry tenant
+        tenant: '${{ secrets.AZURE_TENANT_ID }}'
+        # The name of the ACR, minus the .azurecr.io
+        registry: 'finemanagerapp'
+        # Repository to use
+        repository: 'microservices/finemanager'
+        # Docker image name
+        image: 'microservices/finemanager'
+        # Docker image tag, default to the commit SHA
+        tag: 'latest'
+        # Branch to build from, defaults to master
+        branch: 'main'
+        # The folder in the Github repo that holds the source
+        folder: 'src/Microservices/FineManager'
+        # The location of the Dockerfile; defaults to ./Dockerfile
+        dockerfile: 'dockerfile'
+
+    - name: deploy
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: 'finemanagerapp'
+        template: ./deploy/main.bicep
+        parameters: 'registryUser=${{ secrets.AZURE_ACR_PRINCIPAL }} registryPass=${{ secrets.AZURE_ACR_PRINCIPAL_PASSWORD }}'
+        failOnStdErr: false
