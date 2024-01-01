@@ -1,11 +1,11 @@
-on: [workflow_dispatch]
+on: workflow_dispatch
 
 jobs:
-deploy:
-  runs-on: ubuntu-latest
-  steps:
-  - name Checkout source code
-    uses: actions/checkout@v4
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name Checkout source code
+      uses: actions/checkout@v4
 
 
 
