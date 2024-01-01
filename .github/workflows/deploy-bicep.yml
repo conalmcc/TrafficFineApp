@@ -27,7 +27,7 @@ jobs:
         # Service Principal password
         service_principal_password: '${{ secrets.AZURE_ACR_PRINCIPAL_PASSWORD }}'
         # Azure Container Registry tenant
-        tenant: '${{ secrets.TENANT_ID }}'
+        tenant: '${{ secrets.AZURE_TENANT_ID }}'
         # The name of the ACR, minus the .azurecr.io
         registry: 'finemanagerapp'
         # Repository to use
