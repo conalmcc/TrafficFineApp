@@ -25,7 +25,7 @@ jobs:
         # Service Principal with Contributor role on the ACR
         service_principal: '${{ secrets.AZURE_ACR_PRINCIPAL }}'
         # Service Principal password
-        service_principal_password: '${{ service.AZURE_ACR_PRINCIPAL_PASSWORD }}'
+        service_principal_password: '${{ secrets.AZURE_ACR_PRINCIPAL_PASSWORD }}'
         # The name of the ACR, minus the .azurecr.io
         registry: 'finemanagerapp'
         # Repository to use
