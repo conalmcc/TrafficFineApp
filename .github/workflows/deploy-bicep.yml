@@ -35,7 +35,7 @@ jobs:
         # Docker image name
         image: 'vehicle'
         # Docker image tag, default to the commit SHA
-        tag: 'v1'
+        tag: 'latest'
         # Branch to build from, defaults to master
         branch: 'main'
         # The folder in the Github repo that holds the source
@@ -59,7 +59,7 @@ jobs:
         # Docker image name
         image: 'trafficevents'
         # Docker image tag, default to the commit SHA
-        tag: 'v1'
+        tag: 'latest'
         # Branch to build from, defaults to master
         branch: 'main'
         # The folder in the Github repo that holds the source
@@ -83,7 +83,7 @@ jobs:
         # Docker image name
         image: 'finemanager'
         # Docker image tag, default to the commit SHA
-        tag: 'v1'
+        tag: 'latest'
         # Branch to build from, defaults to master
         branch: 'main'
         # The folder in the Github repo that holds the source
