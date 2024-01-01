@@ -5,7 +5,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
+  build-deploy-images:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -90,9 +90,11 @@ jobs:
         folder: 'src/Microservices/FineManager'
         # The location of the Dockerfile; defaults to ./Dockerfile
         dockerfile: 'dockerfile'
-
-    - name: deploy
+  deploy-bicep-templates:
+    steps:
+    - name: 'Deploy Bicep templates'
       uses: azure/arm-deploy@v1
+      needs: build-deploy-images
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: 'finemanagerapp'
