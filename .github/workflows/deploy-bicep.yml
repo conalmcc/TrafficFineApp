@@ -19,4 +19,27 @@ jobs:
         az account show
         az group list
         pwd 
+    - name: 'Build container images into Azure'
+      uses: Azure/acr-build@v1
+      with:
+        # Service Principal with Contributor role on the ACR
+        service_principal: '${{ secrets.AZURE_ACR_PRINCIPAL }}'
+        # Service Principal password
+        service_principal_password: '${{ service.AZURE_ACR_PRINCIPAL_PASSWORD }}'
+        # The name of the ACR, minus the .azurecr.io
+        registry: 'finemanagerapp'
+        # Repository to use
+        repository: 'microservices/vehicle'
+        # Docker image name
+        image: 'microservices/vehicle-test'
+        # Docker image tag, default to the commit SHA
+        tag: 'latest'
+        # Branch to build from, defaults to master
+        branch: 'main'
+        # The folder in the Github repo that holds the source
+        folder: './src/Microservices/Vehicles'
+        # The location of the Dockerfile; defaults to ./Dockerfile
+        dockerfile: './src/Microservices/Vehicles/dockerfile'
+
+      
 
