@@ -40,7 +40,7 @@ jobs:
         # The folder in the Github repo that holds the source
         folder: 'src/Microservices/Vehicles'
         # The location of the Dockerfile; defaults to ./Dockerfile
-        dockerfile: 'src/Microservices/Vehicles/dockerfile'
+        dockerfile: 'dockerfile'
 
       
 
