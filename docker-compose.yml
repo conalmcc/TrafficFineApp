@@ -29,6 +29,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Release
     entrypoint: ["dotnet", "FineManager.dll"]
 
+
   trafficevents:
     image: finemanagerapp.trafficevents:latest
     build:

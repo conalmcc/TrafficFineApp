@@ -3,7 +3,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /source
 
 # copy csproj and restore as distinct layers
-COPY *.sln .
 COPY *.csproj .
 RUN dotnet restore
 
@@ -16,5 +15,5 @@ RUN dotnet publish -c release -o /build
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /build ./
-EXPOSE 8080
+EXPOSE 8081
 ENTRYPOINT ["dotnet", "TrafficEvents.dll"]
