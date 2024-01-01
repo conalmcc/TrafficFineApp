@@ -1,3 +1,5 @@
+name: deploy bicep templates
+
 on: [workflow_dispatch]
 
 permissions:
