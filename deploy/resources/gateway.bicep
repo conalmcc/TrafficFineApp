@@ -14,7 +14,7 @@ resource network 'Microsoft.Network/virtualNetworks@2019-11-01' existing = {
   name: virtualNetworkName
 }
 
-resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2021-09-01' existing = {
+resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01' existing = {
   name: containerGroupName
 }
 
