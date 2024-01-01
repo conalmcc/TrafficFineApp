@@ -6,8 +6,7 @@ deploy:
   steps:
   - name Checkout source code
     uses: actions/checkout@v4
-    with:
-      path: repo
+
   - name: Login to Azure
     uses: azure/login@v1
     with:
