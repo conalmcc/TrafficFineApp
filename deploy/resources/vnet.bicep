@@ -36,6 +36,12 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
           ]
         }
       }
+      {
+        name: 'Subnet-3'
+        properties: {
+          addressPrefix: '10.0.2.0/24'
+        }
+      }
     ]
   }
 
