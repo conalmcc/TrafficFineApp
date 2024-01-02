@@ -32,7 +32,7 @@ param gatewayName string = 'finemanagerappgateway'
   'Never'
   'OnFailure'
 ])
-param restartPolicy string = 'Never'
+param restartPolicy string = 'Always'
 
 
 
