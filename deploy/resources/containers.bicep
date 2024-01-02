@@ -34,13 +34,13 @@ param restartPolicy string = 'Never'
 
 
 var vehicleContainerName = 'vehicle'
-var vehicleContainerImage = toLower('${pullFromRegistry}/microservices/${vehicleContainerName}:v1')
+var vehicleContainerImage = toLower('${pullFromRegistry}/microservices/${vehicleContainerName}:latest')
 
 var trafficEventsContainerName = 'trafficevents'
-var trafficEventsContainerImage = toLower('${pullFromRegistry}/microservices/${trafficEventsContainerName}:v1')
+var trafficEventsContainerImage = toLower('${pullFromRegistry}/microservices/${trafficEventsContainerName}:latest')
 
 var fineManagerContainerName = 'finemanager'
-var fineManagerContainerImage = toLower('${pullFromRegistry}/microservices/${fineManagerContainerName}:v1')
+var fineManagerContainerImage = toLower('${pullFromRegistry}/microservices/${fineManagerContainerName}:latest')
 
 
 
