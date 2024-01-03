@@ -1,9 +1,13 @@
 @description('Location for all resources.')
 param location string = resourceGroup().location
 
-@description('Base container registry url for microservice container images')
+@description('Base container registry url for microservice container images.')
 param containerRegistry string = 'finemanagerapp.azurecr.io'
+
+@description('Container registry username.')
 param registryUser string
+
+@description('Container registry password.')
 param registryPass string
 
 @description('Name for the container group')
@@ -21,9 +25,16 @@ param cpuCores int = 1
 @description('The amount of memory to allocate to the container in gigabytes.')
 param memoryInGb int = 2
 
+@description('The name of the virtual network that the container group will be deployed to.')
 param virtualNetworkName string = 'fineapp-vnet'
+
+@description('The subnet the container group is assigned to.')
 param containerSubnet string = 'fineapp-subnet'
+
+@description('The subnet which the app gateway is assigned to.')
 param gatewaySubnet string = 'fineapp-gateway-subnet'
+
+@description('The name of the app gateway.')
 param gatewayName string = 'finemanagerappgateway'
 
 @description('The behavior of Azure runtime if container has stopped.')
@@ -37,7 +48,8 @@ param restartPolicy string = 'Always'
 
 
 
-module network 'resources/vnet.bicep' = {
+
+module network 'modules/vnet.bicep' = {
   name: virtualNetworkName
   params: {
     location: location
@@ -48,7 +60,7 @@ module network 'resources/vnet.bicep' = {
 }
 
 
-module containers 'resources/containers.bicep' = {
+module containers 'modules/containers.bicep' = {
   name: containerGroupName
   params: {
     location: location
@@ -70,7 +82,7 @@ module containers 'resources/containers.bicep' = {
 }
 
 
-module gateway 'resources/gateway.bicep' = {
+module gateway 'modules/gateway.bicep' = {
   name: gatewayName
   params: {
     location: location
