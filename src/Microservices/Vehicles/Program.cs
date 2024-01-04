@@ -1,5 +1,7 @@
 using System;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using Serilog.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -34,8 +38,15 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet("/weatherforecast", (string? city) =>
+app.MapGet("/weatherforecast", (string? city, [FromServices] ILoggerFactory loggerFactory) =>
 {
+    LogContext.PushProperty("Endpoint", "GetWeatherForecast");
+
+    var logger = loggerFactory.CreateLogger("WeatherForecast");
+
+    logger.LogInformation("Looking up weather for {city}", city);
+
+
     var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
         (
@@ -44,10 +55,16 @@ app.MapGet("/weatherforecast", (string? city) =>
             summaries[Random.Shared.Next(summaries.Length)]
         ))
         .ToArray();
+
+    logger.LogInformation("Weather forecast generated");
+
     return forecast;
 })
+
+
 .WithName("GetWeatherForecast")
 .WithOpenApi();
+
 
 app.Run();
 
