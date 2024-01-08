@@ -38,8 +38,8 @@ resource fineManagerApplicationGateway 'Microsoft.Network/applicationGateways@20
   location: location
   properties: {
     sku: {
-      name: 'Standard_v2'
-      tier: 'Standard_v2'
+      name: 'Standard_Small'
+      tier: 'Standard'
     }
     gatewayIPConfigurations: [
       {

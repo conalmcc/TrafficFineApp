@@ -23,6 +23,9 @@ param virtualNetworkName string
 param subnetName string
 param subnetId string
 
+@secure()
+param appInsightsInstrumentationKey string
+
 
 @description('The behavior of Azure runtime if container has stopped.')
 @allowed([
@@ -47,6 +50,7 @@ var fineManagerContainerImage = toLower('${pullFromRegistry}/microservices/${fin
 resource network 'Microsoft.Network/virtualNetworks@2019-11-01' existing = {
   name: virtualNetworkName
 }
+
 
 
 resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01' = {
@@ -75,7 +79,14 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01'
             {
               name: 'ASPNETCORE_HTTP_PORTS'
               value: '${backendBasePort}'
-            }]
+            }
+            {
+              name: 'AppInsights_InstrumentationKey'
+              value: appInsightsInstrumentationKey
+
+
+            }
+          ]
           ports: [
             {
               port: backendBasePort
@@ -97,11 +108,16 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01'
           environmentVariables: [
             {
               name: 'ASPNETCORE_HTTP_PORTS'
-              value: '${backendBasePort+1}'
-            }]
+              value: '${backendBasePort + 1}'
+            }
+            {
+              name: 'AppInsights_InstrumentationKey'
+              value: appInsightsInstrumentationKey
+            }
+          ]
           ports: [
             {
-              port: backendBasePort+1
+              port: backendBasePort + 1
               protocol: 'TCP'
             }
           ]
@@ -120,11 +136,16 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01'
           environmentVariables: [
             {
               name: 'ASPNETCORE_HTTP_PORTS'
-              value: '${backendBasePort+2}'
-            }]
+              value: '${backendBasePort + 2}'
+            }
+            {
+              name: 'AppInsights_InstrumentationKey'
+              value: appInsightsInstrumentationKey
+            }
+          ]
           ports: [
             {
-              port: backendBasePort+2
+              port: backendBasePort + 2
               protocol: 'TCP'
             }
           ]
@@ -147,18 +168,18 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01'
           protocol: 'TCP'
         }
         {
-          port: backendBasePort+1
+          port: backendBasePort + 1
           protocol: 'TCP'
         }
         {
-          port: backendBasePort+2
+          port: backendBasePort + 2
           protocol: 'TCP'
-        }        
+        }
       ]
     }
   }
   dependsOn: [
-      network
+    network
   ]
 }
 

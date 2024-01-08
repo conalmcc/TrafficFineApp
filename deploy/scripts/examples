@@ -1,0 +1,17 @@
+#Set variables
+
+resourceGroup="myapp"
+registryName="myappacr"
+keyVaultName="myapp-keyvault"
+
+
+./prepare-new-az-env.sh -g $resourceGroup -r $registryName -k $keyVaultName
+
+#Manually, copy the client id and secret from the returned credentials json and provided below in Client_ID and Client_Secret
+
+./build-and-deploy-containers.sh -g $resourceGroup -r $registryName
+
+#Deploy the infrastructure using bicep
+
+ ./deploy-bicep.sh -g $resourceGroup -r $registryName -k $keyVaultName -c "<CLIENT_ID>" -p "<CLIENT_SECRET>"
+
