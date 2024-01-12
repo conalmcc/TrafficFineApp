@@ -103,7 +103,7 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: 'finemanagerapp'
         template: deploy/bicep/main.bicep
-        parameters: 'registryUser=${{ secrets.AZURE_ACR_PRINCIPAL }} registryPass=${{ secrets.AZURE_ACR_PRINCIPAL_PASSWORD }}'
+        parameters: 'servicePrincipalClientId=${{ secrets.AZURE_ACR_PRINCIPAL }} servicePrincipalPassword=${{ secrets.AZURE_ACR_PRINCIPAL_PASSWORD }}'
         failOnStdErr: true
 
 

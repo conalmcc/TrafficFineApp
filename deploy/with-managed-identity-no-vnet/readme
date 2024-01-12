@@ -1,0 +1,16 @@
+#Set variables
+
+resourceGroup="myapp"
+registryName="myappacr"
+keyVaultName="myapp-keyvault"
+
+
+# Create resource group
+az group create --resource-group $resourceGroup --location "australiasoutheast"
+
+# Deploy the container registry
+./build-and-deploy-containers.sh -g $resourceGroup -r $registryName
+
+#Deploy the infrastructure using bicep
+./deploy-bicep.sh -g $resourceGroup -r $registryName -k $keyVaultName
+

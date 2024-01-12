@@ -38,4 +38,4 @@ servicePrincipalId=$(az ad sp show --id $spClientId --query id -o tsv)
 echo "Using Service Principal Id: "$servicePrincipalId
 
 # Deploy the Bicep template
-az deployment group create --resource-group $resourceGroupName --template-file ../bicep/main.bicep --parameters location=$location containerRegistry=$acrName".azurecr.io" servicePrincipalClientId=$spClientId servicePrincipalId=$servicePrincipalId servicePrincipalPassword=$spClientSecret keyVaultName=$kvName
+az deployment group create --resource-group $resourceGroupName --template-file ./main.bicep --parameters location=$location containerRegistry=$acrName".azurecr.io" servicePrincipalClientId=$spClientId servicePrincipalId=$servicePrincipalId servicePrincipalPassword=$spClientSecret keyVaultName=$kvName

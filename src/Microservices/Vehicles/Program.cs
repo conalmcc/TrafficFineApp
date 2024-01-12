@@ -2,12 +2,37 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Serilog.Context;
+using Azure.Identity;
+using System.Threading.Tasks.Dataflow;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using System.Configuration;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+if (builder.Environment.IsProduction())
+{
+    // Load secrets from Azure Key Vault
+    var keyVaultName = builder.Configuration["KeyVaultName"];
+    builder.Configuration.AddAzureKeyVault( 
+        new Uri($"https://{keyVaultName}.vault.azure.net/"),
+        new DefaultAzureCredential());
+    
+    string APP_INSIGHTS = builder.Configuration["ApplicationInsights:ConnectionString"] ?? "";
+
+    // Assign App Insights connection string to environment variable which App Insights configuration will utilise
+    // Ideally we wouldn't need to do this, but Key Vault doesn't allow underscores in the secret name
+    Environment.SetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING", APP_INSIGHTS);
+
+    builder.Services.AddApplicationInsightsTelemetry();
+}
+
 
 // Add Serilog
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
+
 
 
 // Add services to the container.  
@@ -38,12 +63,11 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet("/weatherforecast", (string? city, [FromServices] ILoggerFactory loggerFactory) =>
+app.MapGet("/weatherforecast", (string? city, [FromServices] ILoggerFactory loggerFactory, IConfiguration configuration) =>
 {
     LogContext.PushProperty("Endpoint", "GetWeatherForecast");
 
     var logger = loggerFactory.CreateLogger("WeatherForecast");
-
     logger.LogInformation("Looking up weather for {city}", city);
 
 
