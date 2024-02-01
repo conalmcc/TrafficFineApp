@@ -6,6 +6,13 @@ using Azure.Identity;
 using System.Threading.Tasks.Dataflow;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using System.Configuration;
+using Azure.Messaging.ServiceBus;
+using Vehicles;
+using MessageBus;
+using Messages;
+using Vehicles.MessageHandlers;
+using Azure;
+using Vehicles.Utils;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +40,14 @@ if (builder.Environment.IsProduction())
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
 
+var sbConnectionString = builder.Configuration.GetValue<string>("ServiceBus:ConnectionString") ?? string.Empty;
+
+builder.Services.AddSingleton<IMessageBus>(
+                x => new MessageBus.MessageBus(
+                    sbConnectionString, 
+                    "fines-queue", x.GetRequiredService<ILogger<MessageBus.MessageBus>>()));
+
+builder.Services.AddSingleton<VehicleEnteredZoneHandler>();
 
 
 // Add services to the container.  
@@ -58,6 +73,11 @@ else
 
 app.UseHttpsRedirection();
 
+await app.ConfigureMessageBus();
+
+
+
+
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -69,7 +89,6 @@ app.MapGet("/weatherforecast", (string? city, [FromServices] ILoggerFactory logg
 
     var logger = loggerFactory.CreateLogger("WeatherForecast");
     logger.LogInformation("Looking up weather for {city}", city);
-
 
     var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
@@ -84,9 +103,17 @@ app.MapGet("/weatherforecast", (string? city, [FromServices] ILoggerFactory logg
 
     return forecast;
 })
-
-
 .WithName("GetWeatherForecast")
+.WithOpenApi();
+
+
+app.MapGet("/vehicles/{licensePlate}", async (string licensePlate, [FromServices] IMessageBus messageBus) =>
+{
+    await messageBus.SendMessageAsync(new VehicleEnteredZone() { EntryTime = DateTime.Now, LicensePlate = licensePlate, Zone = "Zone1" });
+
+    return "Sent message to service bus";
+})
+.WithName("EnterVehicle")
 .WithOpenApi();
 
 
